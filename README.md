@@ -1,10 +1,8 @@
-````markdown
 # 🏷️ Lost and Found
 
 Aplikasi **Lost and Found** adalah platform untuk **melaporkan dan menemukan barang hilang** secara mudah.  
 Frontend ini dibangun dengan **Next.js**, **Tailwind CSS**, dan **Shadcn UI Library** untuk tampilan modern dan responsif.
 
----
 
 ## 🔹 Fitur Utama
 
@@ -21,7 +19,6 @@ Frontend ini dibangun dengan **Next.js**, **Tailwind CSS**, dan **Shadcn UI Libr
 - **React Hooks** – State management dan efek samping.  
 - **TypeScript** – Supaya lebih aman dan maintainable.
 
----
 
 ## 🔹 Instalasi & Setup
 
@@ -52,8 +49,6 @@ npm run dev
 ```
 http://localhost:3000
 ```
-
----
 
 ## 🔹 Struktur Project
 
