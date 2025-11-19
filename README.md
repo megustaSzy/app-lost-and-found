@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+````markdown
+# 🏷️ Lost and Found
 
-## Getting Started
+Aplikasi **Lost and Found** adalah platform untuk **melaporkan dan menemukan barang hilang** secara mudah.  
+Frontend ini dibangun dengan **Next.js**, **Tailwind CSS**, dan **Shadcn UI Library** untuk tampilan modern dan responsif.
 
-First, run the development server:
+---
+
+## 🔹 Fitur Utama
+
+- **Halaman Laporan Barang Hilang** – Pengguna dapat melihat dan mengisi form laporan barang hilang.  
+- **Halaman Barang Ditemukan** – Pengguna bisa menandai barang yang ditemukan.  
+- **Dashboard Admin** – Tampilan admin untuk memantau status laporan.  
+- **Responsive UI** – Komponen UI modern dengan Tailwind + Shadcn UI.  
+
+## 🔹 Teknologi
+
+- **Next.js** – Framework React untuk frontend modern.  
+- **Tailwind CSS** – Styling utility-first cepat dan konsisten.  
+- **Shadcn UI** – Komponen UI siap pakai dan mudah dikustomisasi.  
+- **React Hooks** – State management dan efek samping.  
+- **TypeScript** – Supaya lebih aman dan maintainable.
+
+---
+
+## 🔹 Instalasi & Setup
+
+1. **Clone repository**  
+```bash
+git clone https://github.com/megustaSzy/app-lost-and-found.git
+cd app-lost-and-found
+````
+
+2. **Install dependencies**
+
+```bash
+npm install
+# atau
+yarn install
+```
+
+3. **Buat file `.env`** (jika perlu untuk konfigurasi API)
+
+4. **Jalankan development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. **Buka di browser**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔹 Struktur Project
 
-To learn more about Next.js, take a look at the following resources:
+```
+/app                 # Halaman Next.js (App Router)
+/components          # Komponen UI (Shadcn UI)
+/hooks               # Custom React hooks
+/lib                 # Utility functions / API helpers
+/styles              # Tailwind global styles
+/public              # Asset publik (gambar, ikon, dll.)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
