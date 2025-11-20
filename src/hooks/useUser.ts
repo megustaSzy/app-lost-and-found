@@ -15,19 +15,25 @@ export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchUser = async () => {
+    try {
+      const res = await api.get<{ success: boolean; user: User }>("/users/profile");
+      setUser(res.data.user);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await api.get<{ success: boolean; user: User }>("/users/profile");
-        setUser(res.data.user);
-      } catch {
-        setUser(null); // token invalid atau expired
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUser();
   }, []);
 
-  return { user, loading };
+  // ⬇⬇ fungsi baru untuk refresh user data setelah update
+  const refreshUser = async () => {
+    return await fetchUser();
+  };
+
+  return { user, loading, refreshUser };
 }

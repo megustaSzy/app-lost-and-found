@@ -29,7 +29,6 @@ export default function FoundReportsAdminPage() {
         "--header-height": "calc(var(--spacing) * 12)",
       } as React.CSSProperties}
     >
-      {/* Sidebar */}
       <AppSidebar
         role={user.role}
         user={{
@@ -39,15 +38,18 @@ export default function FoundReportsAdminPage() {
       />
 
       <SidebarInset>
-        {/* Header */}
         <SiteHeader />
 
         {/* MAIN CONTENT */}
         <div className="p-6 space-y-6">
-          <h1 className="text-3xl font-bold">Laporan Ditemukan</h1>
-          <p className="text-muted-foreground">
-            Kelola dan tinjau semua laporan barang yang ditemukan
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight">
+              Laporan Ditemukan
+            </h1>
+            <p className="text-muted-foreground">
+              Kelola dan tinjau semua laporan barang yang ditemukan
+            </p>
+          </div>
 
           <FoundReportAdminTable />
         </div>

@@ -15,7 +15,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-import { DashboardLayout } from "@/components/AppSidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+import { SiteHeader } from "@/components/SiteHeader";
+
 import { FileSearch, Loader2, AlertCircle } from "lucide-react";
 
 import { FoundReportsTable } from "@/components/FoundReports/FoundReportsTable";
@@ -25,7 +28,7 @@ import { FoundReportsDetailDialog } from "@/components/FoundReports/FoundReports
 import { FoundReportUser } from "@/types/found";
 
 function UserFoundReportPage() {
-  const { user: currentUser, loading: userLoading } = useUser();
+  const { user, loading: userLoading } = useUser();
   const { data, error, isLoading } = useFoundReports();
   const [selectedReport, setSelectedReport] =
     useState<FoundReportUser | null>(null);
@@ -38,7 +41,9 @@ function UserFoundReportPage() {
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
         <div className="flex flex-col items-center gap-3 rounded-lg bg-background p-6 shadow-lg">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Memuat data pengguna...</p>
+          <p className="text-sm text-muted-foreground">
+            Memuat data pengguna...
+          </p>
         </div>
       </div>
     );
@@ -47,7 +52,7 @@ function UserFoundReportPage() {
   // ===========================
   // USER BELUM LOGIN
   // ===========================
-  if (!currentUser) {
+  if (!user) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
         <Alert variant="destructive" className="max-w-md">
@@ -61,67 +66,84 @@ function UserFoundReportPage() {
   }
 
   // ===========================
-  // PAGE CONTENT
+  // PAGE CONTENT (LAYOUT BARU)
   // ===========================
   return (
-    <DashboardLayout
-      role={currentUser.role}
-      user={{ name: currentUser.name, email: currentUser.email }}
+    <SidebarProvider
+      style={{
+        "--sidebar-width": "calc(var(--spacing) * 72)",
+        "--header-height": "calc(var(--spacing) * 12)",
+      } as React.CSSProperties}
     >
-      <div className="space-y-6 p-6">
-        {/* HEADER */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Laporan Barang Ditemukan</h1>
-            <p className="text-muted-foreground">
-              Daftar laporan barang yang sudah ditemukan
-            </p>
-          </div>
+      {/* SIDEBAR */}
+      <AppSidebar
+        role={user.role}
+        user={{ name: user.name, email: user.email }}
+      />
 
-          <div className="flex items-center gap-2">
-            <FileSearch className="h-5 w-5 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {data?.length || 0} laporan
-            </span>
-          </div>
+      <SidebarInset>
+        {/* HEADER GLOBAL */}
+        <SiteHeader />
+
+        {/* MAIN CONTENT */}
+        <div className="p-6 space-y-6">
+          {/* HEADER LOCAL */}
+          <div className="flex items-center justify-between">
+  <div className="space-y-1">
+    <h1 className="text-3xl font-bold tracking-tight">
+      Laporan Barang Ditemukan
+    </h1>
+    <p className="text-muted-foreground">
+      Daftar laporan barang yang sudah ditemukan
+    </p>
+  </div>
+
+  <div className="flex items-center gap-2">
+    <FileSearch className="h-5 w-5 text-muted-foreground" />
+    <span className="text-sm text-muted-foreground">
+      {data?.length || 0} laporan
+    </span>
+  </div>
+</div>
+
+
+          {/* TABLE */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Daftar Barang Ditemukan</CardTitle>
+              <CardDescription>
+                Lihat detail barang yang sudah dilaporkan
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              {isLoading && (
+                <div className="space-y-3">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              )}
+
+              {error && (
+                <p className="text-red-600">Gagal memuat data laporan.</p>
+              )}
+
+              {!isLoading && data?.length ? (
+                <FoundReportsTable data={data} onSelect={setSelectedReport} />
+              ) : (
+                !isLoading && <FoundReportsEmpty />
+              )}
+            </CardContent>
+          </Card>
+
+          {/* DETAIL DIALOG */}
+          <FoundReportsDetailDialog
+            report={selectedReport}
+            onClose={() => setSelectedReport(null)}
+          />
         </div>
-
-        {/* TABLE */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Daftar Barang Ditemukan</CardTitle>
-            <CardDescription>
-              Lihat detail barang yang sudah dilaporkan
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            {isLoading && (
-              <div className="space-y-3">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-20 w-full" />
-              </div>
-            )}
-
-            {error && (
-              <p className="text-red-600">Gagal memuat data laporan.</p>
-            )}
-
-            {!isLoading && data?.length ? (
-              <FoundReportsTable data={data} onSelect={setSelectedReport} />
-            ) : (
-              !isLoading && <FoundReportsEmpty />
-            )}
-          </CardContent>
-        </Card>
-
-        {/* DETAIL DIALOG */}
-        <FoundReportsDetailDialog
-          report={selectedReport}
-          onClose={() => setSelectedReport(null)}
-        />
-      </div>
-    </DashboardLayout>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 

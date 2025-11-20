@@ -15,9 +15,11 @@ export default function LostReportsPage() {
   }
 
   if (!user) {
-    return <p className="text-center mt-20 text-red-500">
-      Tidak ada akses. Silakan login kembali.
-    </p>;
+    return (
+      <p className="text-center mt-20 text-red-500">
+        Tidak ada akses. Silakan login kembali.
+      </p>
+    );
   }
 
   return (
@@ -42,10 +44,14 @@ export default function LostReportsPage() {
 
         {/* MAIN CONTENT */}
         <div className="p-6 space-y-6">
-          <h1 className="text-3xl font-bold">Laporan Hilang</h1>
-          <p className="text-muted-foreground">
-            Kelola dan tinjau semua laporan barang hilang
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight">
+              Laporan Hilang
+            </h1>
+            <p className="text-muted-foreground">
+              Kelola dan tinjau semua laporan barang hilang
+            </p>
+          </div>
 
           <LostReportsTable />
         </div>

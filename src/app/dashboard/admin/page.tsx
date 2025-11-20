@@ -109,7 +109,7 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 space-y-8">
           {/* Header Section */}
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold text-black">
               Dashboard Admin
             </h1>
             <p className="text-slate-600 text-lg">
