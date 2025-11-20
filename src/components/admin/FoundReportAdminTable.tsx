@@ -34,6 +34,9 @@ import { LoadingOverlay } from "@/components/admin/LoadingOverlay";
 
 interface FoundReportAdmin {
   id: number;
+  namaBarang?: string;
+  deskripsi?: string;
+  lokasiTemu?: string;
   lostReport?: {
     id: number;
     namaBarang: string;
@@ -74,6 +77,24 @@ export default function FoundReportAdminTable() {
     );
   };
 
+  const getNamaBarang = (report: FoundReportAdmin) =>
+    report.lostReport?.namaBarang || report.namaBarang || "-";
+
+  const getDeskripsi = (report: FoundReportAdmin) =>
+    report.lostReport?.deskripsi || report.deskripsi || "-";
+
+  const getLokasi = (report: FoundReportAdmin) =>
+    report.lostReport?.lokasiHilang || report.lokasiTemu || "-";
+
+  const getPelapor = (report: FoundReportAdmin) =>
+    report.lostReport?.user?.name || "Admin";
+
+  const getTelp = (report: FoundReportAdmin) =>
+    report.lostReport?.user?.notelp || "";
+
+  const getAvatarLetter = (report: FoundReportAdmin) =>
+    report.lostReport?.user?.name?.charAt(0).toUpperCase() || "A";
+
   return (
     <Card>
       <CardHeader>
@@ -82,7 +103,6 @@ export default function FoundReportAdminTable() {
       </CardHeader>
 
       <CardContent className="relative">
-        {/* Loading Overlay */}
         {(isLoading || isValidating) && (
           <LoadingOverlay
             label={isLoading ? "Memuat data..." : "Memperbarui data..."}
@@ -114,30 +134,24 @@ export default function FoundReportAdminTable() {
                 {data.map((report, idx) => (
                   <TableRow key={report.id}>
                     <TableCell className="font-medium">{idx + 1}</TableCell>
-                    <TableCell>{report.lostReport?.namaBarang || "-"}</TableCell>
+                    <TableCell>{getNamaBarang(report)}</TableCell>
                     <TableCell className="max-w-[200px] truncate text-sm text-muted-foreground">
-                      {report.lostReport?.deskripsi || "-"}
+                      {getDeskripsi(report)}
                     </TableCell>
                     <TableCell className="flex items-center gap-1 text-sm">
                       <MapPin className="h-3 w-3 text-muted-foreground" />
-                      {report.lostReport?.lokasiHilang || "-"}
+                      {getLokasi(report)}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Avatar className="h-8 w-8">
-                          <AvatarFallback>
-                            {report.lostReport?.user?.name
-                              ? report.lostReport.user.name.charAt(0).toUpperCase()
-                              : "?"}
-                          </AvatarFallback>
+                          <AvatarFallback>{getAvatarLetter(report)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-sm font-medium">
-                            {report.lostReport?.user?.name || "Tidak diketahui"}
-                          </p>
-                          {report.lostReport?.user?.notelp && (
+                          <p className="text-sm font-medium">{getPelapor(report)}</p>
+                          {getTelp(report) && (
                             <p className="text-xs text-muted-foreground">
-                              📞 {report.lostReport.user.notelp}
+                              📞 {getTelp(report)}
                             </p>
                           )}
                         </div>
@@ -183,24 +197,24 @@ export default function FoundReportAdminTable() {
           {selectedReport && (
             <div className="space-y-4">
               <p>
-                <strong>Nama Barang:</strong> {selectedReport.lostReport?.namaBarang || "-"}
+                <strong>Nama Barang:</strong> {getNamaBarang(selectedReport)}
               </p>
               <p>
-                <strong>Deskripsi:</strong> {selectedReport.lostReport?.deskripsi || "-"}
+                <strong>Deskripsi:</strong> {getDeskripsi(selectedReport)}
               </p>
               <p className="flex items-center gap-1">
                 <MapPin className="h-3 w-3 text-muted-foreground" />
-                {selectedReport.lostReport?.lokasiHilang || "-"}
+                {getLokasi(selectedReport)}
               </p>
               <p>
                 <strong>Status:</strong> {selectedReport.statusFound}
               </p>
               <p>
-                <strong>Pelapor:</strong> {selectedReport.lostReport?.user?.name || "-"}
+                <strong>Pelapor:</strong> {getPelapor(selectedReport)}
               </p>
-              {selectedReport.lostReport?.user?.notelp && (
+              {getTelp(selectedReport) && (
                 <p>
-                  <strong>No. Telp:</strong> {selectedReport.lostReport.user.notelp}
+                  <strong>No. Telp:</strong> {getTelp(selectedReport)}
                 </p>
               )}
             </div>

@@ -21,5 +21,6 @@ export const userMenu = [
   { name: "Dashboard", path: "/dashboard/user", icon: LayoutDashboard },
   { name: "Buat Laporan Hilang", path: "/dashboard/user/lost-reports/create", icon: PlusCircle },
   { name: "Laporan Hilang Saya", path: "/dashboard/user/lost-reports", icon: FileText },
+  { name: "Laporan Penemuan Admin", path : "/dashboard/user/found-admin", icon: UserCircle },
   { name: "History Barang Ditemukan", path: "/dashboard/user/found-reports", icon: History },
 ]

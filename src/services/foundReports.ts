@@ -7,6 +7,29 @@ interface CreateFoundReportResponse {
   data?: any; // bisa disesuaikan
 }
 
+// ====================== Admin ======================
+export async function createAdminFoundReport(
+  payload: CreateFoundReportPayload
+): Promise<CreateFoundReportResponse> {
+  
+  const formData = new FormData();
+  formData.append("namaBarang", payload.namaBarang);
+  formData.append("deskripsi", payload.deskripsi);
+  formData.append("lokasiTemu", payload.lokasiTemu);
+
+  if (payload.image) {
+    formData.append("image", payload.image);
+  }
+
+  // Endpoint admin
+  const res = await api.post<CreateFoundReportResponse>("/found/admin/foundreports", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return res.data;
+}
+
+// ====================== User (existing) ======================
 export async function createFoundReport(
   payload: CreateFoundReportPayload
 ): Promise<CreateFoundReportResponse> {
