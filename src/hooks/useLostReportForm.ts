@@ -1,25 +1,20 @@
-// hooks/useFoundReportForm.ts
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createFoundReport, createAdminFoundReport } from "@/services/foundReports";
-import type { CreateFoundReportPayload } from "@/types/foundReports";
+import { createLostReport } from "@/services/lostReports";
+import type { CreateLostReportPayload } from "@/types/lostReports";
 
-interface UseFoundReportFormOptions {
-  isAdmin?: boolean;
+interface UseLostReportFormOptions {
   redirectUrl?: string;
 }
 
-export function useFoundReportForm(options?: UseFoundReportFormOptions) {
+export function useLostReportForm(options?: UseLostReportFormOptions) {
   const router = useRouter();
-  const { isAdmin = false, redirectUrl } = options || {};
+  const redirectUrl = options?.redirectUrl || "/dashboard/user/lost-reports";
 
-  const defaultRedirect = isAdmin ? "/dashboard/admin/found-reports" : "/dashboard/user/found-reports";
-  const finalRedirect = redirectUrl || defaultRedirect;
-
-  const [data, setData] = useState<CreateFoundReportPayload>({
+  const [data, setData] = useState<CreateLostReportPayload>({
     namaBarang: "",
     deskripsi: "",
-    lokasiTemu: "",
+    lokasiHilang: "",
     image: null,
   });
 
@@ -27,10 +22,15 @@ export function useFoundReportForm(options?: UseFoundReportFormOptions) {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  function updateField<K extends keyof CreateFoundReportPayload>(key: K, value: CreateFoundReportPayload[K]) {
+  // Update field
+  function updateField<K extends keyof CreateLostReportPayload>(
+    key: K,
+    value: CreateLostReportPayload[K]
+  ) {
     setData((prev) => ({ ...prev, [key]: value }));
   }
 
+  // Handle image select
   function handleImage(file: File | null) {
     if (!file) {
       removeImage();
@@ -49,27 +49,32 @@ export function useFoundReportForm(options?: UseFoundReportFormOptions) {
     setErrorMsg("");
   }
 
+  // Remove image
   function removeImage() {
     updateField("image", null);
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl("");
   }
 
+  // Submit form
   async function submit() {
     if (!data.namaBarang.trim()) return setErrorMsg("Nama barang harus diisi");
-    if (!data.lokasiTemu.trim()) return setErrorMsg("Lokasi ditemukan harus diisi");
+    if (!data.lokasiHilang.trim()) return setErrorMsg("Lokasi kehilangan harus diisi");
 
     setLoading(true);
     setErrorMsg("");
 
     try {
-      // pilih service sesuai role
-      const res = isAdmin
-        ? await createAdminFoundReport(data)
-        : await createFoundReport(data);
+      const formData = new FormData();
+      formData.append("namaBarang", data.namaBarang);
+      formData.append("deskripsi", data.deskripsi || "");
+      formData.append("lokasiHilang", data.lokasiHilang);
+      if (data.image) formData.append("image", data.image);
+
+      const res = await createLostReport(formData);
 
       if (res.success) {
-        router.push(finalRedirect);
+        router.push(redirectUrl);
       } else {
         setErrorMsg(res.message || "Gagal membuat laporan");
       }
@@ -81,7 +86,7 @@ export function useFoundReportForm(options?: UseFoundReportFormOptions) {
     }
   }
 
-  // cleanup URL ketika component unmount
+  // Clean up preview URL on unmount
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);

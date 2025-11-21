@@ -95,9 +95,8 @@ export default function LostReportForm() {
         const formData = new FormData();
         formData.append("image", imageFile);
 
-        await api.post(`/image/lost-report/${lostReportId}/upload`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+
+        await api.post(`/image/lost-report/${lostReportId}/upload`, formData)
       }
 
       setSuccessMsg("Laporan berhasil dibuat!");

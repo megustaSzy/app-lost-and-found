@@ -2,12 +2,11 @@
 
 import useSWR from "swr";
 import { useUser } from "@/hooks/useUser";
-
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SiteHeader } from "@/components/SiteHeader";
 
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, FileSearch, Eye } from "lucide-react";
@@ -22,14 +21,8 @@ import { AdminFoundReport } from "@/types/foundReports";
 
 export default function AdminFoundReportsPage() {
   const { user, loading: userLoading } = useUser();
-
-  const { data, error, isValidating } = useSWR(
-    "/found/foundreports/admin",
-    adminFoundFetcher
-  );
-
+  const { data, error, isValidating } = useSWR("/found/foundreports/admin", adminFoundFetcher);
   const [selectedReport, setSelectedReport] = useState<AdminFoundReport | null>(null);
-
   const isLoading = userLoading || (!data && !error);
 
   if (!user && !userLoading) {
@@ -46,20 +39,8 @@ export default function AdminFoundReportsPage() {
   };
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar
-        role={user?.role || "User"}
-        user={{
-          name: user?.name || "",
-          email: user?.email || "",
-        }}
-      />
-
+    <SidebarProvider style={{ "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" } as React.CSSProperties}>
+      <AppSidebar role={user?.role || "User"} user={{ name: user?.name || "", email: user?.email || "" }} />
       <SidebarInset>
         <SiteHeader />
 
@@ -68,13 +49,11 @@ export default function AdminFoundReportsPage() {
         <div className="p-6 space-y-6">
           <div className="space-y-1">
             <h1 className="text-3xl font-bold tracking-tight">Laporan Penemuan Admin</h1>
-            <p className="text-muted-foreground">
-              Barang yang dilaporkan oleh admin
-            </p>
+            <p className="text-muted-foreground">Barang yang dilaporkan oleh admin</p>
           </div>
 
           <Card>
-            <div className="relative">
+            <CardContent className="relative">
               {(isLoading || isValidating) && <FullscreenLoader validating={isValidating} />}
 
               {error ? (
@@ -85,7 +64,7 @@ export default function AdminFoundReportsPage() {
                   <Skeleton className="h-20 w-full" />
                 </div>
               ) : data && data.length > 0 ? (
-                <div className="rounded-md border">
+                <div className="rounded-md border overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -99,9 +78,9 @@ export default function AdminFoundReportsPage() {
                     </TableHeader>
                     <TableBody>
                       {data.map((report, idx) => (
-                        <TableRow key={report.id}>
+                        <TableRow key={report.id} className="hover:bg-muted/50 transition-colors">
                           <TableCell>{idx + 1}</TableCell>
-                          <TableCell>{report.namaBarang}</TableCell>
+                          <TableCell className="font-medium">{report.namaBarang}</TableCell>
                           <TableCell className="max-w-[200px] truncate text-sm text-muted-foreground">{report.deskripsi}</TableCell>
                           <TableCell className="flex items-center gap-1 text-sm">
                             <MapPin className="h-3 w-3 text-muted-foreground" />
@@ -113,7 +92,12 @@ export default function AdminFoundReportsPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button size="sm" variant="outline" onClick={() => setSelectedReport(report)}>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 w-8 p-0 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-600 transition-all duration-200 hover:scale-110"
+                              onClick={() => setSelectedReport(report)}
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                           </TableCell>
@@ -129,7 +113,7 @@ export default function AdminFoundReportsPage() {
                   <p className="text-sm text-muted-foreground">Laporan dari admin akan muncul di sini</p>
                 </div>
               )}
-            </div>
+            </CardContent>
           </Card>
 
           {/* Modal detail */}

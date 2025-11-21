@@ -1,6 +1,5 @@
 "use client";
 
-import { useFoundReportForm } from "@/hooks/useFoundReportForm";
 import {
   Card,
   CardHeader,
@@ -14,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload, X, AlertCircle } from "lucide-react";
+import { useFoundReportForm } from "@/hooks/useFoundReportForm";
 
 export default function CreateFoundReportAdmin() {
   const {
@@ -25,13 +25,15 @@ export default function CreateFoundReportAdmin() {
     submit,
     loading,
     errorMsg,
-  } = useFoundReportForm();
+  } = useFoundReportForm({ isAdmin: true, redirectUrl: "/dashboard/admin/found-reports" });
 
   return (
     <Card className="max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle>Informasi Barang Temuan</CardTitle>
-        <CardDescription>Lengkapi form di bawah untuk mencatat barang yang ditemukan</CardDescription>
+        <CardDescription>
+          Lengkapi form di bawah untuk mencatat barang yang ditemukan
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -53,7 +55,7 @@ export default function CreateFoundReportAdmin() {
           />
         </div>
 
-        {/* Lokasi */}
+        {/* Lokasi Ditemukan */}
         <div className="space-y-2">
           <Label>Lokasi Ditemukan *</Label>
           <Input
@@ -98,10 +100,19 @@ export default function CreateFoundReportAdmin() {
             </label>
           ) : (
             <div className="relative w-full border rounded-lg overflow-hidden group">
-              <img src={previewUrl} alt="Preview" className="w-full h-full object-contain bg-muted" />
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-full h-full object-contain bg-muted"
+              />
 
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <Button variant="destructive" size="sm" onClick={removeImage} className="gap-1">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={removeImage}
+                  className="gap-1"
+                >
                   <X className="h-4 w-4" /> Hapus
                 </Button>
               </div>
@@ -111,11 +122,20 @@ export default function CreateFoundReportAdmin() {
 
         {/* Submit */}
         <div className="flex gap-3 pt-4">
-          <Button variant="outline" className="flex-1" onClick={() => history.back()} disabled={loading}>
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => history.back()}
+            disabled={loading}
+          >
             Batal
           </Button>
 
-          <Button className="flex-1 gap-2" disabled={loading} onClick={submit}>
+          <Button
+            className="flex-1 gap-2"
+            disabled={loading}
+            onClick={submit}
+          >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? "Menyimpan..." : "Simpan Laporan"}
           </Button>
