@@ -55,8 +55,11 @@ const fetcher = (url: string): Promise<FoundReportAdmin[]> =>
   api.get(url).then((res) => res.data.data as FoundReportAdmin[]);
 
 export default function FoundReportAdminTable() {
+
   const { data, error, isValidating }: SWRResponse<FoundReportAdmin[], Error> =
-    useSWR("/found", fetcher);
+
+    useSWR("/found/foundreports/admin", fetcher);
+
   const [selectedReport, setSelectedReport] = useState<FoundReportAdmin | null>(
     null
   );
